@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>APPLE | WAY</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+    
+    * {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Poppins', sans-serif;
+}
+
+body {
+  min-height: 100vh;
+  background: #000 url('99.png') no-repeat center center/cover;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start; /* BADILISHA hii */
+  align-items: center;
+  padding: 20px;
+  position: relative;
+  overflow-x: hidden;  /* BADILISHA hii kutoka overflow: hidden */
+}
+
+
+body::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.7);
+  z-index: -1;
+}
+
+/* Message Box */
+.message-box {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 20px;
+  z-index: 1000;
+  transform: translateY(-100%);
+  transition: transform 0.4s ease-out;
+}
+
+.message-box.success {
+  background-color: white;
+  color: green;
+  transform: translateY(0);
+}
+
+.message-box.error {
+  background-color: white;
+  color: red;
+  transform: translateY(0);
+}
+
+/* Logo */
+.logo {
+  height: 60px;
+  margin-bottom: 80px;
+}
+
+/* Header */
+.signup-header {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.signup-header h2 {
+  color: #f8fafc;
+  font-size: 24px;
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+
+/* Form Fields */
+.form-group {
+  margin-bottom: 20px;
+  position: relative;
+  width: 100%;
+  max-width: 450px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 8px;
+  color: #e2e8f0;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 14px 16px;
+  border: 2px solid #e9eef5;
+  border-radius: 0;
+  font-size: 15px;
+  transition: all 0.3s;
+  background: rgba(15, 23, 42, 0.7);
+  color: #f8fafc;
+}
+
+.form-group input:focus {
+  border-color: #e9e9f4;
+  box-shadow: 0 0 0 3px rgba(236, 236, 245, 0.3);
+}
+
+.form-group input::placeholder {
+  color: #cbd5e1;
+}
+
+/* Password Visibility Toggle */
+.password-container {
+  position: relative;
+}
+
+.show-password {
+  position: absolute;
+  right: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #94a3b8;
+  cursor: pointer;
+  font-size: 18px;
+}
+
+.show-password:hover {
+  color: #6366f1;
+}
+
+/* Button */
+button {
+  width: 100%;
+  max-width: 450px;
+  padding: 16px;
+  border: none;
+  border-radius: 8px;
+  background: brown;
+  color: white;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s;
+  margin-top: 20px;
+  box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
+}
+
+button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(99, 102, 241, 0.4);
+}
+
+button:active {
+  transform: translateY(0);
+}
+
+/* Error Message */
+.error-message {
+  color: #f87171;
+  font-size: 12px;
+  margin-top: 6px;
+  display: none;
+  animation: shake 0.5s ease;
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  20%, 60% { transform: translateX(-5px); }
+  40%, 80% { transform: translateX(5px); }
+}
+
+/* Spinner */
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(15, 23, 42, 0.9);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  display: none;
+}
+
+.spinner {
+  position: relative;
+  width: 80px;
+  height: 80px;
+}
+
+.spinner div {
+  transform-origin: 40px 40px;
+  animation: spinnerAnim 1.2s linear infinite;
+}
+
+.spinner div:after {
+  content: " ";
+  display: block;
+  position: absolute;
+  top: 3px;
+  left: 37px;
+  width: 6px;
+  height: 18px;
+  border-radius: 20%;
+  background: #fff;
+}
+
+.spinner div:nth-child(n) {
+  animation-delay: calc(-1.2s + 0.1s * (12 - var(--i)));
+  transform: rotate(calc(30deg * var(--i)));
+}
+
+.spinner div {
+      transform-origin: 40px 40px;
+      animation: spinnerAnim 1.2s linear infinite;
+    }
+
+    .spinner div:after {
+      content: " ";
+      display: block;
+      position: absolute;
+      top: 3px;
+      left: 37px;
+      width: 6px;
+      height: 18px;
+      border-radius: 20%;
+      background: #fff;
+    }
+
+    .spinner div:nth-child(1) {
+      transform: rotate(0deg);
+      animation-delay: -1.1s;
+    }
+    .spinner div:nth-child(2) {
+      transform: rotate(30deg);
+      animation-delay: -1s;
+    }
+    .spinner div:nth-child(3) {
+      transform: rotate(60deg);
+      animation-delay: -0.9s;
+    }
+    .spinner div:nth-child(4) {
+      transform: rotate(90deg);
+      animation-delay: -0.8s;
+    }
+    .spinner div:nth-child(5) {
+      transform: rotate(120deg);
+      animation-delay: -0.7s;
+    }
+    .spinner div:nth-child(6) {
+      transform: rotate(150deg);
+      animation-delay: -0.6s;
+    }
+    .spinner div:nth-child(7) {
+      transform: rotate(180deg);
+      animation-delay: -0.5s;
+    }
+    .spinner div:nth-child(8) {
+      transform: rotate(210deg);
+      animation-delay: -0.4s;
+    }
+    .spinner div:nth-child(9) {
+      transform: rotate(240deg);
+      animation-delay: -0.3s;
+    }
+    .spinner div:nth-child(10) {
+      transform: rotate(270deg);
+      animation-delay: -0.2s;
+    }
+    .spinner div:nth-child(11) {
+      transform: rotate(300deg);
+      animation-delay: -0.1s;
+    }
+    .spinner div:nth-child(12) {
+      transform: rotate(330deg);
+      animation-delay: 0s;
+    }
+
+    @keyframes spinnerAnim {
+      0% { opacity: 1; }
+      100% { opacity: 0; }
+    }
+
+@keyframes spinnerAnim {
+  0% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+/* Link */
+.link {
+  margin-top: 20px;
+  text-align: center;
+}
+
+.link a {
+  color: white;
+  padding: 10px;
+  font-weight: bold;
+  text-decoration: none;
+}
+
+/* Mobile Responsive */
+@media (max-width: 480px) {
+  body {
+    padding: 15px;
+  }
+
+  .logo {
+    position: static;
+    margin: 20px auto;
+  }
+
+  .signup-header h2 {
+    font-size: 22px;
+  }
+
+  button {
+    padding: 14px;
+  }
+}
+
+  </style>
+</head>
+<body>
+  <!-- Message Box -->
+  <div class="message-box" id="message-box"></div>
+
+  <!-- Logo Section -->
+  <div class="logo">
+    <img src="99.png" alt="logo">
+  </div>
+
+  <!-- Signup Header -->
+  <div class="signup-header">
+    <h2>Register</h2>
+  </div>
+
+  <!-- Form -->
+  <form id="signup-form">
+    <div class="form-group">
+      <label>Phone</label>
+      <input type="tel" id="signup-phone" placeholder="Enter your phone number Eg 07" required>
+      <div class="error-message" id="phone-error"></div>
+    </div>
+
+    <div class="form-group">
+      <label>Password</label>
+      <div class="password-container">
+        <input type="password" id="signup-password" placeholder="Create a password" required>
+        <i class="fas fa-eye show-password" id="show-password"></i>
+      </div>
+      <div class="error-message" id="password-error"></div>
+    </div>
+
+    <div class="form-group">
+      <label>Confirm</label>
+      <div class="password-container">
+        <input type="password" id="confirm-password" placeholder="Confirm your password" required>
+        <i class="fas fa-eye show-password" id="show-confirm-password"></i>
+      </div>
+      <div class="error-message" id="confirm-error"></div>
+    </div>
+
+    <button type="submit" id="register-btn">
+      <span>Submit</span>
+    </button>
+  </form>
+
+  <div class="link">
+    <p>Already Registered? <a href="login.html">Login</a></p>
+  </div>
+
+  <!-- Loading overlay with custom spinner -->
+  <div class="overlay" id="loading-overlay">
+    <div class="spinner">
+      <div></div><div></div><div></div><div></div><div></div><div></div>
+      <div></div><div></div><div></div><div></div><div></div><div></div>
+    </div>
+  </div>
+
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+
+  <script>
+    // Firebase Configuration
+    const firebaseConfig = {
+        apiKey: "AIzaSyDGmXXHxaZUcFs1q18hrs7v7mp0IENCcdY",
+        authDomain: "apple-way.firebaseapp.com",
+        databaseURL: "https://apple-way-default-rtdb.firebaseio.com",
+        projectId: "apple-way",
+        storageBucket: "apple-way.firebasestorage.app",
+        messagingSenderId: "952192190392",
+        appId: "1:952192190392:web:eb373b981bf094cd22714d",
+        measurementId: "G-9KTFGQPTLB"
+    };
+
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const database = firebase.database();
+
+    // Toggle password visibility
+    document.getElementById('show-password').addEventListener('click', function() {
+      const passwordInput = document.getElementById('signup-password');
+      const icon = this;
+      if (passwordInput.type === 'password') {
+        passwordInput.type = 'text';
+        icon.classList.remove('fa-eye');
+        icon.classList.add('fa-eye-slash');
+      } else {
+        passwordInput.type = 'password';
+        icon.classList.remove('fa-eye-slash');
+        icon.classList.add('fa-eye');
+      }
+    });
+
+    document.getElementById('show-confirm-password').addEventListener('click', function() {
+      const confirmInput = document.getElementById('confirm-password');
+      const icon = this;
+      if (confirmInput.type === 'password') {
+        confirmInput.type = 'text';
+        icon.classList.remove('fa-eye');
+        icon.classList.add('fa-eye-slash');
+      } else {
+        confirmInput.type = 'password';
+        icon.classList.remove('fa-eye-slash');
+        icon.classList.add('fa-eye');
+      }
+    });
+
+    // Generate referral code (capital letters and numbers only)
+    function generateReferralCode(length = 8) {
+      const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+      let result = "";
+      for (let i = 0; i < length; i++) {
+        result += chars.charAt(Math.floor(Math.random() * chars.length));
+      }
+      return result;
+    }
+
+    // Get referral code from URL or input field
+    function getReferralCode() {
+      const params = new URLSearchParams(window.location.search);
+      const urlRef = params.get("ref");
+      
+      return inputRef || urlRef || null;
+    }
+
+    // Show message box
+    function showMessage(type, message) {
+      const messageBox = document.getElementById('message-box');
+      messageBox.className = `message-box ${type}`;
+      messageBox.innerHTML = `<i class="fas ${type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle'}"></i> ${message}`;
+      
+      // Hide after 5 seconds
+      setTimeout(() => {
+        messageBox.style.transform = 'translateY(-100%)';
+      }, 5000);
+    }
+
+    // Show/hide error messages
+    function showError(fieldId, message) {
+      const errorElement = document.getElementById(fieldId);
+      if (errorElement) {
+        errorElement.textContent = message;
+        errorElement.style.display = "block";
+      }
+    }
+
+    function hideError(fieldId) {
+      const errorElement = document.getElementById(fieldId);
+      if (errorElement) {
+        errorElement.style.display = "none";
+      }
+    }
+
+    // Badilisha sehemu ya form submission kwa hii:
+    document.getElementById('signup-form').addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      // Hide all errors
+      const errorFields = [
+        'phone-error',
+        'password-error',
+        'confirm-error'
+      ];
+      
+      errorFields.forEach(field => hideError(field));
+      
+      // Get values
+      const phone = document.getElementById('signup-phone').value.trim();
+      const password = document.getElementById('signup-password').value.trim();
+      const confirmPassword = document.getElementById('confirm-password').value.trim();
+      const refCode = new URLSearchParams(window.location.search).get("ref"); // Added this line
+      
+      // Validate
+      let isValid = true;
+      
+      if (!phone) {
+        showError('phone-error', 'Phone number is required');
+        isValid = false;
+      } else if (!/^[0-9]{10,15}$/.test(phone)) {
+        showError('phone-error', 'Please enter a valid phone number');
+        isValid = false;
+      }
+      
+      if (!password) {
+        showError('password-error', 'Password is required');
+        isValid = false;
+      } else if (password.length < 6) {
+        showError('password-error', 'Password must be at least 6 characters');
+        isValid = false;
+      }
+      
+      if (password !== confirmPassword) {
+        showError('confirm-error', 'Passwords do not match');
+        isValid = false;
+      }
+      
+      if (!isValid) return;
+      
+      // Show loading with custom spinner
+      document.getElementById('loading-overlay').style.display = 'flex';
+      
+      // Generate a random email since we're not using email anymore
+      const email = `${phone}@appleway.com`;
+      
+      // Create user
+      auth.createUserWithEmailAndPassword(email, password)
+        .then(async (userCredential) => {
+          const user = userCredential.user;
+          const referralCode = generateReferralCode();
+          
+          // Prepare user data
+          const userData = {
+            phone,
+            level1: [],
+            level2: [],
+            level3: [],
+            balance: 0,
+            profit: 0,
+            deposited: 0,
+            totalEarnings: 0,
+            signupDate: new Date().toISOString(),
+            referralCode,
+            referrer: null,
+            referrerCode: refCode || null
+          };
+          
+          // Process referral if exists
+          if (refCode) {
+            try {
+              const referrerSnapshot = await database.ref("users")
+                .orderByChild("referralCode")
+                .equalTo(refCode)
+                .once("value");
+              
+              if (referrerSnapshot.exists()) {
+                const referrerData = referrerSnapshot.val();
+                const referrerId = Object.keys(referrerData)[0];
+                const referrer = referrerData[referrerId];
+                
+                userData.referrer = referrerId;
+                
+                // Add to referrer's level1
+                await database.ref(`users/${referrerId}/level1`).push(user.uid);
+                
+                // Add to level2 if exists
+                if (referrer.referrer) {
+                  const level2Id = referrer.referrer;
+                  await database.ref(`users/${level2Id}/level2`).push(user.uid);
+                  
+                  // Add to level3 if exists
+                  const level2Snapshot = await database.ref(`users/${level2Id}`).once("value");
+                  const level2Data = level2Snapshot.val();
+                  if (level2Data.referrer) {
+                    const level3Id = level2Data.referrer;
+                    await database.ref(`users/${level3Id}/level3`).push(user.uid);
+                  }
+                }
+              }
+            } catch (error) {
+              console.error("Referral processing error:", error);
+            }
+          }
+          
+          // Save user data - CHANGED THIS LINE
+          await database.ref("users/" + user.uid).set(userData)
+            .then(() => {
+              console.log("Data saved successfully!");
+            })
+            .catch((error) => {
+              console.error("Error saving data:", error);
+            });
+          
+          // Hide loading
+          document.getElementById('loading-overlay').style.display = 'none';
+          
+          // Show success message
+          showMessage('success', 'Success');
+          
+          // Redirect after delay
+          setTimeout(() => {
+            window.location.href = "dashboard.html";
+          }, 100);
+        })
+        .catch((error) => {
+          document.getElementById('loading-overlay').style.display = 'none';
+          
+          let errorMessage = "Registration failed. Please try again.";
+          if (error.code === 'auth/email-already-in-use') {
+            errorMessage = "This phone number is already registered";
+          } else if (error.code === 'auth/weak-password') {
+            errorMessage = "Password should be at least 6 characters";
+          }
+          
+          showMessage('error', errorMessage);
+        });
+    });
+  </script>
+</body>
+</html>
